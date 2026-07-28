@@ -12,6 +12,7 @@ from flask import Flask
 
 from app.config import Config
 from app.extensions import cors, db, jwt, migrate
+from app.routes.facilities import facility_bp
 
 # Import all models so Flask-Migrate can detect them
 import app.models
@@ -42,6 +43,7 @@ def create_app():
 
     # Allow React frontend communication
     cors.init_app(app)
+    app.register_blueprint(facility_bp)
 
     return app
 
