@@ -11,7 +11,10 @@ and prepares the backend.
 from flask import Flask
 
 from app.config import Config
-from app.extensions import db, migrate, jwt, cors
+from app.extensions import cors, db, jwt, migrate
+
+# Import all models so Flask-Migrate can detect them
+import app.models
 
 
 def create_app():
