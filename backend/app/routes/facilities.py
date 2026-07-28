@@ -6,6 +6,7 @@ for facility management.
 """
 
 from flask import Blueprint, jsonify, request
+from marshmallow import ValidationError
 
 from app.schemas.facility import (
     facilities_schema,
@@ -32,122 +33,80 @@ facility_bp = Blueprint(
 
 @facility_bp.route("", methods=["GET"])
 def get_facilities():
-    """
-    Get all facilities.
-    """
-
+    """Get all facilities."""
     facilities = get_all_facilities()
-
-    return jsonify(
-        facilities_schema.dump(facilities)
-    ), 200
+    return jsonify(facilities_schema.dump(facilities)), 200
 
 
 @facility_bp.route("/<int:facility_id>", methods=["GET"])
 def get_single_facility(facility_id):
-    """
-    Get one facility by ID.
-    """
-
+    """Get one facility by ID."""
     facility = get_facility_by_id(facility_id)
 
     if not facility:
-        return jsonify({
-            "message": "Facility not found"
-        }), 404
+        return jsonify({"message": "Facility not found"}), 404
 
-    return jsonify(
-        facility_schema.dump(facility)
-    ), 200
+    return jsonify(facility_schema.dump(facility)), 200
 
 
 @facility_bp.route("/search", methods=["GET"])
 def search():
-    """
-    Search facilities.
-
-    Example:
-    /api/facilities/search?q=library
-    """
-
-    search_term = request.args.get("q")
+    """Search facilities by name, category, or location."""
+    search_term = request.args.get("q", "").strip()
 
     if not search_term:
-        return jsonify({
-            "message": "Search term is required"
-        }), 400
+        return jsonify({"message": "Search term is required"}), 400
 
     facilities = search_facilities(search_term)
-
-    return jsonify(
-        facilities_schema.dump(facilities)
-    ), 200
+    return jsonify(facilities_schema.dump(facilities)), 200
 
 
 @facility_bp.route("", methods=["POST"])
 def add_facility():
-    """
-    Create a new facility.
+    """Create a new facility."""
+    data = request.get_json(silent=True)
 
-    Admin protection will be added later
-    with JWT decorators.
-    """
+    if data is None:
+        return jsonify({"message": "A JSON request body is required"}), 400
 
-    data = request.get_json()
+    try:
+        facility = create_facility(facility_schema.load(data))
+    except ValidationError as error:
+        return jsonify({"errors": error.messages}), 400
 
-    facility = create_facility(data)
-
-    return jsonify(
-        facility_schema.dump(facility)
-    ), 201
+    return jsonify(facility_schema.dump(facility)), 201
 
 
-@facility_bp.route(
-    "/<int:facility_id>",
-    methods=["PUT"]
-)
+@facility_bp.route("/<int:facility_id>", methods=["PUT"])
 def edit_facility(facility_id):
-    """
-    Update an existing facility.
-    """
-
+    """Update an existing facility."""
     facility = get_facility_by_id(facility_id)
 
     if not facility:
-        return jsonify({
-            "message": "Facility not found"
-        }), 404
+        return jsonify({"message": "Facility not found"}), 404
 
-    data = request.get_json()
+    data = request.get_json(silent=True)
 
-    updated_facility = update_facility(
-        facility,
-        data
-    )
+    if data is None:
+        return jsonify({"message": "A JSON request body is required"}), 400
 
-    return jsonify(
-        facility_schema.dump(updated_facility)
-    ), 200
+    try:
+        updated_facility = update_facility(
+            facility, facility_schema.load(data, partial=True)
+        )
+    except ValidationError as error:
+        return jsonify({"errors": error.messages}), 400
+
+    return jsonify(facility_schema.dump(updated_facility)), 200
 
 
-@facility_bp.route(
-    "/<int:facility_id>",
-    methods=["DELETE"]
-)
+@facility_bp.route("/<int:facility_id>", methods=["DELETE"])
 def remove_facility(facility_id):
-    """
-    Delete a facility.
-    """
-
+    """Delete a facility."""
     facility = get_facility_by_id(facility_id)
 
     if not facility:
-        return jsonify({
-            "message": "Facility not found"
-        }), 404
+        return jsonify({"message": "Facility not found"}), 404
 
     delete_facility(facility)
-
-    return jsonify({
-        "message": "Facility deleted successfully"
-    }), 200
+    return jsonify({"message": "Facility deleted successfully"}), 200
