@@ -1,5 +1,5 @@
 from flask import request
-from app import app
+from backend.app import app
 from app.schemas.schedule import schedules_schema
 from app.services.schedule import (get_all_schedules, filter_schedules)
 
