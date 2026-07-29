@@ -1,1 +1,72 @@
+# =====================
+# Python
+# =====================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Pipenv
+Pipfile.lock
+
+
+# =====================
+# Environment variables
+# =====================
+
 .env
+.env.*
+
+
+# =====================
+# Flask
+# =====================
+
+instance/
+.webassets-cache/
+
+# Flask cache
+.pytest_cache/
+.coverage
+
+
+# =====================
+# Database
+# =====================
+
+*.sqlite
+*.db
+
+
+# =====================
+# Migrations
+# =====================
+
+# Keep migrations in a team project
+# migrations/
+
+
+# =====================
+# IDE / Editors
+# =====================
+
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+
+# =====================
+# Logs
+# =====================
+
+*.log
+
+
