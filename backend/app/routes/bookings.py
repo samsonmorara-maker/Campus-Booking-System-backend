@@ -1,0 +1,50 @@
+from flask import request, jsonify
+from app import app
+from app.schemas.booking import (booking_schema, bookings_schema)
+from app.services.booking import (create_booking, get_user_bookings, cancel_booking)
+
+
+# Create a booking
+@app.route("/bookings", methods=["POST"])
+def create_booking_route():
+    data = request.get_json()
+
+    if not data:
+        return jsonify({
+            "message": "Booking data is required."
+        }), 400
+
+    booking = create_booking(data)
+
+    if booking is None:
+        return jsonify({
+            "message": "Facility is not available for the selected time."
+        }), 400
+
+
+    return booking_schema.jsonify(booking), 201
+
+# Get all bookings for a user
+@app.route("/bookings/<int:user_id>", methods=["GET"])
+def get_bookings(user_id):
+    bookings = get_user_bookings(user_id)
+
+    return bookings_schema.jsonify(bookings), 200
+
+# Cancel a booking
+@app.route("/bookings/<int:booking_id>/cancel", methods=["PATCH"])
+def cancel_booking_route(booking_id):
+    booking = cancel_booking(booking_id)
+
+    if booking is None:
+        return jsonify({
+            "message": "Booking not found."
+        }), 404
+
+    if booking is False:
+        return jsonify({
+            "message": "Only pending bookings can be cancelled."
+        }), 400
+
+
+    return booking_schema.jsonify(booking), 200
