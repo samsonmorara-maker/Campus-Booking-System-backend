@@ -1,10 +1,13 @@
-from app import db
+from app.extensions import db
 
 
 class ClassSchedule(db.Model):
     __tablename__ = "class_schedules"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
 
     facility_id = db.Column(
         db.Integer,
@@ -44,7 +47,7 @@ class ClassSchedule(db.Model):
 
     facility = db.relationship(
         "Facility",
-        backref="class_schedules"
+        back_populates="class_schedules"
     )
 
     def __repr__(self):
