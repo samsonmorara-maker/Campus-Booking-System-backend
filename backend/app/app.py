@@ -11,8 +11,16 @@ and prepares the backend.
 from flask import Flask
 
 from app.config import Config
-from app.extensions import cors, db, jwt, migrate
-from app.routes.facilities import facility_bp
+from app.extensions import (
+    cors,
+    db,
+    jwt,
+    migrate,
+)
+
+from app.routes.facilities import (
+    register_facility_routes,
+)
 
 # Import all models so Flask-Migrate can detect them
 import app.models
@@ -30,20 +38,20 @@ def create_app():
     # Load configuration settings
     app.config.from_object(Config)
 
-    # Initialize Flask extensions
-
-    # Connect database to Flask app
+    # Initialize database
     db.init_app(app)
 
-    # Connect migration system
+    # Initialize migrations
     migrate.init_app(app, db)
 
-    # Connect JWT authentication
+    # Initialize JWT
     jwt.init_app(app)
 
-    # Allow React frontend communication
+    # Enable CORS
     cors.init_app(app)
-    app.register_blueprint(facility_bp)
+
+    # Register facility routes
+    register_facility_routes(app)
 
     return app
 
