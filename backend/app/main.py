@@ -1,5 +1,6 @@
 from flask import Flask
 from app.config import Config
+import app.utils.jwt
 from app.extensions import db, migrate, jwt, cors, ma
 
 app = Flask(__name__)

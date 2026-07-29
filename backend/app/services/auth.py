@@ -40,13 +40,13 @@ class AuthService:
             last_name=data["last_name"],
             email=data["email"],
             password=hash_password(data["password"]),
-            role="student"
+            role="student",
         )
         db.session.add(new_user)
         db.session.commit()
         return {
             "message": "Registration successful.",
-            "user": user_schema.dump(new_user)
+            "user": user_schema.dump(new_user),
         }, 201
 
     @staticmethod
@@ -64,7 +64,7 @@ class AuthService:
             }, 401
         if not check_password(
             data["password"],
-            user.password
+            user.password,
         ):
             return {
                 "message": "Invalid email or password."
@@ -73,10 +73,10 @@ class AuthService:
             identity=str(user.id),
             additional_claims={
                 "role": user.role
-            }
+            },
         )
         return {
             "message": "Login successful.",
             "access_token": access_token,
-            "user": user_schema.dump(user)
+            "user": user_schema.dump(user),
         }, 200

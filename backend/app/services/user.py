@@ -10,7 +10,9 @@ class UserService:
             return {
                 "message": "User not found."
             }, 404
-        return user_schema.dump(user), 200
+        return {
+            "user": user_schema.dump(user)
+        }, 200
 
     @staticmethod
     def update_profile(user_id, data):
@@ -19,12 +21,12 @@ class UserService:
             return {
                 "message": "User not found."
             }, 404
-        if "first_name" in data:
+        if data.get("first_name"):
             user.first_name = data["first_name"]
-        if "last_name" in data:
+        if data.get("last_name"):
             user.last_name = data["last_name"]
         db.session.commit()
         return {
             "message": "Profile updated successfully.",
-            "user": user_schema.dump(user)
+            "user": user_schema.dump(user),
         }, 200

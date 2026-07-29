@@ -7,6 +7,6 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
         load_instance = True
         include_fk = True
     password = ma.auto_field(load_only=True)
-
+    
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
