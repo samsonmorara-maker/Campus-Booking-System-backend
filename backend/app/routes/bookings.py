@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from backend.app import app
+from app import app
 from app.schemas.booking import (booking_schema, bookings_schema)
 from app.services.booking import (create_booking, get_user_bookings, cancel_booking)
 
