@@ -68,18 +68,5 @@ class Facility(db.Model):
         default=datetime.utcnow
     )
 
-    # Relationships
-    bookings = db.relationship(
-        "Booking",
-        back_populates="facility",
-        lazy=True
-    )
-
-    class_schedules = db.relationship(
-        "ClassSchedule",
-        back_populates="facility",
-        lazy=True
-    )
-
     def __repr__(self):
         return f"<Facility {self.name}>"
