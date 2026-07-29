@@ -22,11 +22,11 @@ class User(db.Model):
         default=datetime.utcnow,
         onupdate=datetime.utcnow
     )
-    bookings = db.relationship(
-        "Booking",
-        back_populates="user",
-        cascade="all, delete-orphan"
-    )
+    # bookings = db.relationship(
+    #     "Booking",
+    #     back_populates="user",
+    #     cascade="all, delete-orphan"
+    # )
 
     def to_dict(self):
         return {
