@@ -1,0 +1,3 @@
+grep -q "^.env$" .gitignore && echo "already ignored" || echo ".env" >> .gitignore.env
+migrations/
+.env
