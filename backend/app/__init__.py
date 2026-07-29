@@ -1,5 +1,7 @@
-"""Expose the Flask application for the Flask CLI."""
+"""
+Expose Flask application factory.
+"""
 
-from app.app import app, create_app
+from app.app import create_app
 
-__all__ = ["app", "create_app"]
+__all__ = ["create_app"]

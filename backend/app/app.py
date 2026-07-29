@@ -1,60 +1,36 @@
 """
-app/app.py
+Flask application configuration.
 
-Main Flask application file.
-
-This file creates the Flask application,
-loads configuration, initializes extensions,
-and prepares the backend.
+Initializes extensions and registers routes.
 """
 
 from flask import Flask
 
 from app.config import Config
-from app.extensions import (
-    cors,
-    db,
-    jwt,
-    migrate,
-)
+from app.extensions import db, migrate, jwt, cors
 
-from app.routes.facilities import (
-    register_facility_routes,
-)
+from app.routes.facilities import register_facility_routes
 
-# Import all models so Flask-Migrate can detect them
+# Import models for SQLAlchemy
 import app.models
 
 
 def create_app():
     """
-    Application factory function.
-
-    Creates and configures the Flask application.
+    Create and configure Flask application.
     """
 
     app = Flask(__name__)
 
-    # Load configuration settings
     app.config.from_object(Config)
 
-    # Initialize database
+    # Initialize extensions
     db.init_app(app)
-
-    # Initialize migrations
     migrate.init_app(app, db)
-
-    # Initialize JWT
     jwt.init_app(app)
-
-    # Enable CORS
     cors.init_app(app)
 
-    # Register facility routes
+    # Register routes
     register_facility_routes(app)
 
     return app
-
-
-# Create application instance
-app = create_app()

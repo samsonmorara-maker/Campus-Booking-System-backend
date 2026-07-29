@@ -1,5 +1,7 @@
 """
 Facility routes without Flask Blueprints.
+
+Routes are registered directly on the Flask app.
 """
 
 from flask import jsonify, request
@@ -22,18 +24,24 @@ from app.services.facility import (
 
 def register_facility_routes(app):
     """
-    Register facility routes directly on the Flask app.
+    Register facility routes directly on Flask app.
     """
+
 
     @app.route("/api/facilities", methods=["GET"])
     def get_facilities():
+
         facilities = get_all_facilities()
+
         return jsonify(
             facilities_schema.dump(facilities)
         ), 200
 
 
-    @app.route("/api/facilities/<int:facility_id>", methods=["GET"])
+    @app.route(
+        "/api/facilities/<int:facility_id>",
+        methods=["GET"]
+    )
     def get_single_facility(facility_id):
 
         facility = get_facility_by_id(facility_id)
@@ -48,7 +56,10 @@ def register_facility_routes(app):
         ), 200
 
 
-    @app.route("/api/facilities/search", methods=["GET"])
+    @app.route(
+        "/api/facilities/search",
+        methods=["GET"]
+    )
     def search():
 
         search_term = request.args.get("q")
@@ -65,7 +76,10 @@ def register_facility_routes(app):
         ), 200
 
 
-    @app.route("/api/facilities", methods=["POST"])
+    @app.route(
+        "/api/facilities",
+        methods=["POST"]
+    )
     def add_facility():
 
         try:
@@ -85,7 +99,10 @@ def register_facility_routes(app):
             }), 400
 
 
-    @app.route("/api/facilities/<int:facility_id>", methods=["PUT"])
+    @app.route(
+        "/api/facilities/<int:facility_id>",
+        methods=["PUT"]
+    )
     def edit_facility(facility_id):
 
         facility = get_facility_by_id(facility_id)
@@ -118,7 +135,10 @@ def register_facility_routes(app):
             }), 400
 
 
-    @app.route("/api/facilities/<int:facility_id>", methods=["DELETE"])
+    @app.route(
+        "/api/facilities/<int:facility_id>",
+        methods=["DELETE"]
+    )
     def remove_facility(facility_id):
 
         facility = get_facility_by_id(facility_id)
