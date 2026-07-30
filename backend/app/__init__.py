@@ -13,7 +13,20 @@ app.config.from_object(Config)
 db.init_app(app)
 migrate.init_app(app, db)
 jwt.init_app(app)
-cors.init_app(app)
+cors.init_app(
+    app,
+    resources={
+        r"/api/*": {
+            "origins": [
+                "http://localhost:5173",
+                
+            ]
+        }
+    },
+    methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"]
+)
+
 ma.init_app(app)
 
 # Import routes after the application and extensions are initialized.
