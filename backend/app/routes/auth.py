@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from app.main import app
+from app import app
 from app.services.auth import AuthService
 
 @app.route("/api/auth/register", methods=["POST"])
