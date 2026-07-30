@@ -1,7 +1,21 @@
 """
-Expose Flask application factory.
+Initialize the Flask application.
 """
 
-from app.app import create_app
+from flask import Flask
 
-__all__ = ["create_app"]
+from app.config import Config
+from app.extensions import db, migrate, jwt, cors
+
+import app.models
+
+app = Flask(__name__)
+app.config.from_object(Config)
+
+db.init_app(app)
+migrate.init_app(app, db)
+jwt.init_app(app)
+cors.init_app(app)
+
+# Import routes
+from app.routes import facilities

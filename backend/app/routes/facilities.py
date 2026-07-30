@@ -2,10 +2,10 @@
 Facility routes.
 
 Contains facility API endpoint functions.
-Routes are attached in the main application file.
 """
 
 from flask import jsonify, request
+from app import app
 from marshmallow import ValidationError
 
 from app.schemas.facility import (
@@ -23,6 +23,7 @@ from app.services.facility import (
 )
 
 
+@app.route("/api/facilities", methods=["GET"])
 def get_facilities():
 
     facilities = get_all_facilities()
@@ -32,7 +33,7 @@ def get_facilities():
     ), 200
 
 
-
+@app.route("/api/facilities/<int:facility_id>", methods=["GET"])
 def get_single_facility(facility_id):
 
     facility = get_facility_by_id(facility_id)
@@ -47,7 +48,7 @@ def get_single_facility(facility_id):
     ), 200
 
 
-
+@app.route("/api/facilities/search", methods=["GET"])
 def search():
 
     search_term = request.args.get("q")
@@ -64,11 +65,16 @@ def search():
     ), 200
 
 
-
+@app.route("/api/facilities", methods=["POST"])
 def add_facility():
 
     try:
         data = request.get_json()
+
+        if not data:
+            return jsonify({
+                "message": "Request body is required."
+            }), 400
 
         validated_data = facility_schema.load(data)
 
@@ -84,7 +90,7 @@ def add_facility():
         }), 400
 
 
-
+@app.route("/api/facilities/<int:facility_id>", methods=["PUT"])
 def edit_facility(facility_id):
 
     facility = get_facility_by_id(facility_id)
@@ -96,6 +102,11 @@ def edit_facility(facility_id):
 
     try:
         data = request.get_json()
+
+        if not data:
+            return jsonify({
+                "message": "Request body is required."
+            }), 400
 
         validated_data = facility_schema.load(
             data,
@@ -117,7 +128,7 @@ def edit_facility(facility_id):
         }), 400
 
 
-
+@app.route("/api/facilities/<int:facility_id>", methods=["DELETE"])
 def remove_facility(facility_id):
 
     facility = get_facility_by_id(facility_id)
