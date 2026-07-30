@@ -45,14 +45,12 @@ def list_users():
 @app.route("/api/admin/make-admin/<int:user_id>", methods=["PATCH"])
 def make_admin(user_id):
     user = User.query.get(user_id)
-
     if not user:
         return jsonify({
             "message": "User not found"
         }), 404
     user.role = User.ADMIN
     db.session.commit()
-
     return jsonify({
         "message": "User promoted to admin",
         "user_id": user.id,
