@@ -23,7 +23,7 @@ cors.init_app(
             ]
         }
     },
-    methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    methods=["GET", "POST","PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"]
 )
 
