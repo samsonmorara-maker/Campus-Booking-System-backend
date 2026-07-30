@@ -13,6 +13,7 @@ def create_booking(data):
 
     if not available:
         return None
+
     booking = Booking(
         user_id=data["user_id"],
         facility_id=data["facility_id"],
@@ -27,6 +28,7 @@ def create_booking(data):
 
     return booking
 
+
 def get_user_bookings(user_id):
     return Booking.query.filter_by(
         user_id=user_id
@@ -35,9 +37,9 @@ def get_user_bookings(user_id):
 
 def cancel_booking(booking_id):
     booking = Booking.query.get(booking_id)
+
     if not booking:
         return None
-
     if booking.status != "Pending":
         return False
 
@@ -45,3 +47,19 @@ def cancel_booking(booking_id):
     db.session.commit()
 
     return booking
+
+
+
+def check_availability(facility_id, booking_date, start_time, end_time):
+    existing_booking = Booking.query.filter(
+        Booking.facility_id == facility_id,
+        Booking.booking_date == booking_date,
+        Booking.start_time < end_time,
+        Booking.end_time > start_time,
+        Booking.status != "Cancelled"
+    ).first()
+    if existing_booking:
+        return False
+
+
+    return True

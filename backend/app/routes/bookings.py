@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from app import app
 from app.schemas.booking import (booking_schema, bookings_schema)
-from app.services.booking import (create_booking, get_user_bookings, cancel_booking)
+from app.services.booking import (create_booking, get_user_bookings, cancel_booking, check_availability)
 
 
 # Create a booking
@@ -48,3 +48,28 @@ def cancel_booking_route(booking_id):
 
 
     return booking_schema.jsonify(booking), 200
+
+@app.route("/bookings/availability", methods=["GET"])
+def check_availability_route():
+    facility_id = request.args.get(
+        "facility_id",
+        type=int
+    )
+    booking_date = request.args.get(
+        "booking_date"
+    )
+    start_time = request.args.get(
+        "start_time"
+    )
+    end_time = request.args.get(
+        "end_time"
+    )
+    available = check_availability(
+        facility_id,
+        booking_date,
+        start_time,
+        end_time
+    )
+    return jsonify({
+        "available": available
+    }), 200
