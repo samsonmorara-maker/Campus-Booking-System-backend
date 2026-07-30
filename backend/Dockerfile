@@ -18,4 +18,8 @@ RUN pipenv install --system --deploy
 
 COPY . .
 
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT run:app"]
+COPY start.sh .
+
+RUN chmod +x start.sh
+
+CMD ["./start.sh"]
