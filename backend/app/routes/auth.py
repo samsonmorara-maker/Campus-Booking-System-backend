@@ -4,7 +4,7 @@ from app.services.auth import AuthService
 
 @app.route("/api/auth/register", methods=["POST"])
 def register():
-    data = request.get_json()
+    data = request.get_json(silent=True)
     if not data:
         return jsonify({
             "message": "Request body is required."
@@ -14,7 +14,7 @@ def register():
 
 @app.route("/api/auth/login", methods=["POST"])
 def login():
-    data = request.get_json()
+    data = request.get_json(silent=True)
     if not data:
         return jsonify({
             "message": "Request body is required."

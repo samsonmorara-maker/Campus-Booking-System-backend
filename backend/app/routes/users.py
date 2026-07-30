@@ -17,7 +17,7 @@ def get_profile():
 @jwt_required()
 def update_profile():
     user_id = get_jwt_identity()
-    data = request.get_json()
+    data = request.get_json(silent=True)
     if not data:
         return jsonify({
             "message": "Request body is required."
