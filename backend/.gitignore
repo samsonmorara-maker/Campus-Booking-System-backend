@@ -21,3 +21,14 @@ migrations/__pycache__/
 
 # macOS
 .DS_Store
+
+# Additional local environment and runtime artifacts
+env/
+.env.*
+.webassets-cache/
+.pytest_cache/
+.coverage
+*.sqlite
+*.db
+Thumbs.db
+*.log

@@ -17,4 +17,4 @@ cors.init_app(app)
 ma.init_app(app)
 
 # Import routes after the application and extensions are initialized.
-from app.routes import auth, facilities, users
+from app.routes import auth, bookings, facilities, schedules, users

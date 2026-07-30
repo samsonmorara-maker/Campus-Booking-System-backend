@@ -68,5 +68,8 @@ class Facility(db.Model):
         default=datetime.utcnow
     )
 
+    bookings = db.relationship("Booking", back_populates="facility")
+    class_schedules = db.relationship("ClassSchedule", back_populates="facility")
+
     def __repr__(self):
         return f"<Facility {self.name}>"
