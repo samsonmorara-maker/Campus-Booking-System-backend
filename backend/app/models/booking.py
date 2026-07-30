@@ -17,7 +17,7 @@ class Booking(db.Model):
 
     end_time = db.Column(db.Time, nullable=False)
 
-    status = db.Column(db.String(20), nullable=False, default="Pending")
+    status = db.Column(db.String(20), nullable=False, default="pending")
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 

@@ -20,7 +20,7 @@ def create_booking(data):
         booking_date=data["booking_date"],
         start_time=data["start_time"],
         end_time=data["end_time"],
-        status="Pending"
+        status="pending"
     )
 
     db.session.add(booking)
@@ -40,10 +40,10 @@ def cancel_booking(booking_id):
 
     if not booking:
         return None
-    if booking.status != "Pending":
+    if booking.status != "pending":
         return False
 
-    booking.status = "Cancelled"
+    booking.status = "cancelled"
     db.session.commit()
 
     return booking
@@ -56,7 +56,7 @@ def check_availability(facility_id, booking_date, start_time, end_time):
         Booking.booking_date == booking_date,
         Booking.start_time < end_time,
         Booking.end_time > start_time,
-        Booking.status != "Cancelled"
+        Booking.status != "cancelled"
     ).first()
     if existing_booking:
         return False

@@ -10,3 +10,14 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
+
+
+def user_to_dict(user):
+    """Serialize a user without exposing their password."""
+    return {
+        "id": user.id,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "email": user.email,
+        "role": user.role,
+    }
