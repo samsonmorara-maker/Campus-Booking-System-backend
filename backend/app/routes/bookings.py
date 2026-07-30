@@ -5,7 +5,7 @@ from app.services.booking import (create_booking, get_user_bookings, cancel_book
 
 
 # Create a booking
-@app.route("/bookings", methods=["POST"])
+@app.route("/api/bookings", methods=["POST"])
 def create_booking_route():
     data = request.get_json()
 
@@ -25,14 +25,14 @@ def create_booking_route():
     return booking_schema.jsonify(booking), 201
 
 # Get all bookings for a user
-@app.route("/bookings/<int:user_id>", methods=["GET"])
+@app.route("/api/bookings/<int:user_id>", methods=["GET"])
 def get_bookings(user_id):
     bookings = get_user_bookings(user_id)
 
     return bookings_schema.jsonify(bookings), 200
 
 # Cancel a booking
-@app.route("/bookings/<int:booking_id>/cancel", methods=["PATCH"])
+@app.route("/api/bookings/<int:booking_id>/cancel", methods=["PATCH"])
 def cancel_booking_route(booking_id):
     booking = cancel_booking(booking_id)
 
@@ -49,7 +49,7 @@ def cancel_booking_route(booking_id):
 
     return booking_schema.jsonify(booking), 200
 
-@app.route("/bookings/availability", methods=["GET"])
+@app.route("/api/bookings/availability", methods=["GET"])
 def check_availability_route():
     facility_id = request.args.get("facility_id", type=int)
     booking_date = request.args.get("booking_date")
