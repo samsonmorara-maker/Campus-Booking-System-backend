@@ -62,9 +62,15 @@ def update_facility(facility, data):
     return facility
 
 
+
 def delete_facility(facility):
     """
-    Delete a facility.
+    Delete a facility only if it has no bookings.
     """
+    if facility.bookings:
+        return False
+
     db.session.delete(facility)
     db.session.commit()
+
+    return True

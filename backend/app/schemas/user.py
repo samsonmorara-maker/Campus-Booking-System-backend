@@ -45,3 +45,6 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
+
+def user_to_dict(user):
+    return user_schema.dump(user)

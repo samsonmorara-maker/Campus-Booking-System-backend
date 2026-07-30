@@ -16,7 +16,7 @@ def get_profile():
 @app.route("/api/users/profile", methods=["PUT"])
 @jwt_required()
 def update_profile():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     data = request.get_json(silent=True)
     if not data:
         return jsonify({

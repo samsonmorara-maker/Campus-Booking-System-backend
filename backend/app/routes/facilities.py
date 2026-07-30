@@ -25,9 +25,7 @@ from app.services.facility import (
 
 @app.route("/api/facilities", methods=["GET"])
 def get_facilities():
-
     facilities = get_all_facilities()
-
     return jsonify(
         facilities_schema.dump(facilities)
     ), 200
@@ -35,9 +33,7 @@ def get_facilities():
 
 @app.route("/api/facilities/<int:facility_id>", methods=["GET"])
 def get_single_facility(facility_id):
-
     facility = get_facility_by_id(facility_id)
-
     if not facility:
         return jsonify({
             "message": "Facility not found"
@@ -50,9 +46,7 @@ def get_single_facility(facility_id):
 
 @app.route("/api/facilities/search", methods=["GET"])
 def search():
-
     search_term = request.args.get("q")
-
     if not search_term:
         return jsonify({
             "message": "Search term is required"
@@ -67,10 +61,8 @@ def search():
 
 @app.route("/api/facilities", methods=["POST"])
 def add_facility():
-
     try:
         data = request.get_json()
-
         if not data:
             return jsonify({
                 "message": "Request body is required."
@@ -92,9 +84,7 @@ def add_facility():
 
 @app.route("/api/facilities/<int:facility_id>", methods=["PUT"])
 def edit_facility(facility_id):
-
     facility = get_facility_by_id(facility_id)
-
     if not facility:
         return jsonify({
             "message": "Facility not found"
@@ -130,16 +120,19 @@ def edit_facility(facility_id):
 
 @app.route("/api/facilities/<int:facility_id>", methods=["DELETE"])
 def remove_facility(facility_id):
-
     facility = get_facility_by_id(facility_id)
-
     if not facility:
         return jsonify({
-            "message": "Facility not found"
+            "message": "Facility not found."
         }), 404
 
-    delete_facility(facility)
+    result = delete_facility(facility)
+
+    if result is False:
+        return jsonify({
+            "message": "Cannot delete a facility because it has existing bookings."
+        }), 400
 
     return jsonify({
-        "message": "Facility deleted successfully"
+        "message": "Facility deleted successfully."
     }), 200
