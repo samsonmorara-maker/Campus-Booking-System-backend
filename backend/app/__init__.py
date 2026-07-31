@@ -19,6 +19,7 @@ cors.init_app(
         r"/api/*": {
             "origins": [
                 "http://localhost:5173",
+                'https://lighthearted-pasca-70837f.netlify.app'
                 
             ]
         }
